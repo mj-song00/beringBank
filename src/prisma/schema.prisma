@@ -20,22 +20,31 @@ model User {
   cashBalance  Int       @default(0)
   card         Card[]
   account      Account[]
+  createAt     DateTime  @default(now())
+  updateAt     DateTime  @updatedAt
 }
 
 model Card {
-  id         Int     @id @default(autoincrement())
+  id         Int      @id @default(autoincrement())
   cardNumber String
-  isAble     Boolean @default(true)
-  User       User?   @relation(fields: [userId], references: [id])
+  isAble     Boolean  @default(true)
+  User       User?    @relation(fields: [userId], references: [id])
   userId     Int?
+  Account    Account? @relation(fields: [accountId], references: [id])
+  accountId  Int?
+  createAt   DateTime @default(now())
+  updateAt   DateTime @updatedAt
 }
 
 model Account {
-  id             Int    @id @default(autoincrement())
-  accountNumber  String @unique
-  withdrawCash   Int
-  depositCash    Int
-  accountBalance Int
-  User           User?  @relation(fields: [userId], references: [id])
+  id             Int      @id @default(autoincrement())
+  accountNumber  String   @unique
+  withdrawCash   Int      @default(0)
+  depositCash    Int      @default(0)
+  accountBalance Int      @default(0)
+  User           User?    @relation(fields: [userId], references: [id])
   userId         Int?
+  card           Card[]
+  createAt       DateTime @default(now())
+  updateAt       DateTime @updatedAt
 }
