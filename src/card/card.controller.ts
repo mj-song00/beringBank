@@ -15,28 +15,30 @@ import { UpdateCardDto } from './dto/update-card.dto';
 export class CardController {
   constructor(private readonly cardService: CardService) {}
 
+  //카드 발급
   @Get('/register')
   create() {
     return this.cardService.register();
   }
 
-  @Get()
-  findAll() {
-    return this.cardService.findAll();
+  //card use or not to use
+  @Patch('convert/:id')
+  update(@Param('id') id: string) {
+    return this.cardService.update(+id);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.cardService.findOne(+id);
+  //user와 card 연결
+  @Patch('/:id')
+  connetUser(@Param('id') id: string) {
+    return this.cardService.connetUser(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCardDto: UpdateCardDto) {
-    return this.cardService.update(+id, updateCardDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.cardService.remove(+id);
+  //card와 account 연결
+  @Patch('/connect/:cardId/:accountId')
+  connetAccount(
+    @Param('cardId') cardId: string,
+    @Param('accountId') accountId: string,
+  ) {
+    return this.cardService.connetAccount(cardId, accountId);
   }
 }

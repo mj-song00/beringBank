@@ -30,18 +30,8 @@ export class UserService {
       },
     });
     delete user.password;
-    console.log(user);
     return { result: user, message: '유저생성 완료' };
   }
-
-  // async findAll() {
-  //   const users = await this.prismaService.user.findMany({
-  //     include: {
-  //       card: true,
-  //       account: true,
-  //     },
-  //   });
-  // }
 
   async findOne(id: number) {
     const user = await this.prismaService.user.findUnique({
@@ -49,13 +39,5 @@ export class UserService {
       include: { card: true, account: true },
     });
     delete user.password;
-  }
-
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
   }
 }

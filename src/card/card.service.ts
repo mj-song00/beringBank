@@ -2,11 +2,13 @@ import { PrismaService } from './../prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
 import { CreateCardDto } from './dto/create-card.dto';
 import { UpdateCardDto } from './dto/update-card.dto';
+import { find } from 'rxjs';
 
 @Injectable()
 export class CardService {
   constructor(private prismaService: PrismaService) {}
   async register() {
+    const random = parseInt(process.env.CARD_RANDOM_NUMBER);
     function randomNumber(n) {
       let str = '';
       for (let i = 0; i < n; i++) {
@@ -14,7 +16,8 @@ export class CardService {
       }
       return str;
     }
-    const number = randomNumber(9);
+
+    const number = randomNumber(random);
 
     const card = await this.prismaService.card.create({
       data: {
@@ -27,19 +30,64 @@ export class CardService {
     return card;
   }
 
-  async findAll() {
-    // const users = await this.prismaService.user.findMany({ where });
+  async update(id: number) {
+    const number = Number(id);
+    const card = await this.prismaService.card.findUnique({
+      where: { id: number },
+    });
+
+    const convert = await this.prismaService.card.update({
+      where: { id: number },
+      data: {
+        isAble: card.isAble ? false : true,
+      },
+    });
+
+    return { message: 'card convert success' };
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} card`;
+  async connetUser(id: string) {
+    const user = Number(id);
+
+    const card = await this.prismaService.card.update({
+      where: {
+        id: user,
+      },
+      data: {
+        User: {
+          connect: {
+            id: user,
+          },
+        },
+      },
+      include: {
+        User: true,
+      },
+    });
+    delete card.User.password;
+
+    return { message: 'User connet success' };
   }
 
-  update(id: number, updateCardDto: UpdateCardDto) {
-    return `This action updates a #${id} card`;
-  }
+  async connetAccount(cardId: string, accountId: string) {
+    const findCard = Number(cardId);
+    const account = Number(accountId);
 
-  remove(id: number) {
-    return `This action removes a #${id} card`;
+    const card = await this.prismaService.card.update({
+      where: {
+        id: findCard,
+      },
+      data: {
+        Account: {
+          connect: {
+            id: account,
+          },
+        },
+      },
+      include: {
+        Account: true,
+      },
+    });
+    return { message: 'card connet account' };
   }
 }
