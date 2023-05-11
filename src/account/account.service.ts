@@ -78,11 +78,39 @@ export class AccountService {
       },
     });
 
-    console.log(balance, userCash);
-    //return;
+    return { result: balance.accountBalance };
   }
 
-  async withdrawCash(withdrawCash: string) {
-    return;
+  async withdrawCash(userId: string, accountId: string, withdraw: string) {
+    const user = Number(userId);
+    const account = Number(accountId);
+    const cash = Number(withdraw);
+
+    const balance = await this.prismaService.account.update({
+      where: {
+        id: account,
+      },
+      data: {
+        withdrawCash: {
+          increment: cash,
+        },
+        accountBalance: { decrement: cash },
+      },
+    });
+    const userCash = await this.prismaService.user.update({
+      where: {
+        id: user,
+      },
+      data: {
+        cashDeposit: {
+          decrement: cash,
+        },
+        cashBalance: {
+          increment: cash,
+        },
+      },
+    });
+
+    return { result: balance.accountBalance };
   }
 }

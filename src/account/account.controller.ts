@@ -31,8 +31,12 @@ export class AccountController {
   }
 
   //현금출금
-  @Post('/:withdraw')
-  withdrawCash(@Param() withdrawCash: string) {
-    return this.accountService.withdrawCash(withdrawCash);
+  @Post('/withdraw/:userId/:accountId/:withdraw')
+  withdrawCash(
+    @Param('userId') userId: string,
+    @Param('accountId') accountId: string,
+    @Param('withdraw') withdraw: string,
+  ) {
+    return this.accountService.withdrawCash(userId, accountId, withdraw);
   }
 }
