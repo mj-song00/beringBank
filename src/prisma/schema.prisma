@@ -17,7 +17,7 @@ model User {
   nickname     String
   cashWithdraw Int       @default(0)
   cashDeposit  Int       @default(0)
-  cashBalance  Int       @default(0)
+  cashBalance  Int       @default(1000)
   card         Card[]
   account      Account[]
   createAt     DateTime  @default(now())
