@@ -1,4 +1,4 @@
-import { Controller, Get, Patch, Param } from '@nestjs/common';
+import { Controller, Get, Patch, Param, Post } from '@nestjs/common';
 import { AccountService } from './account.service';
 
 @Controller('account')
@@ -12,8 +12,27 @@ export class AccountController {
   }
 
   //user와 account 연결
-  @Patch('/:userId')
-  update(@Param('userId') id: string) {
-    return this.accountService.update(id);
+  @Patch('/connect/:accountId/:userId')
+  update(
+    @Param('accountId') accountId: string,
+    @Param('userId') userId: string,
+  ) {
+    return this.accountService.update(accountId, userId);
+  }
+
+  //현금 입금
+  @Post('/deposit/:userId/:accountId/:deposit')
+  depositCash(
+    @Param('userId') userId: string,
+    @Param('accountId') accountId: string,
+    @Param('deposit') deposit: string,
+  ) {
+    return this.accountService.depositCash(userId, accountId, deposit);
+  }
+
+  //현금출금
+  @Post('/:withdraw')
+  withdrawCash(@Param() withdrawCash: string) {
+    return this.accountService.withdrawCash(withdrawCash);
   }
 }
