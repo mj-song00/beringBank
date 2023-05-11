@@ -24,17 +24,31 @@ export class UserService {
         password: hashedPassword,
         nickname,
       },
+      include: {
+        card: true,
+        account: true,
+      },
     });
-
+    delete user.password;
+    console.log(user);
     return { result: user, message: '유저생성 완료' };
   }
 
-  findAll() {
-    return `This action returns all user`;
-  }
+  // async findAll() {
+  //   const users = await this.prismaService.user.findMany({
+  //     include: {
+  //       card: true,
+  //       account: true,
+  //     },
+  //   });
+  // }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: number) {
+    const user = await this.prismaService.user.findUnique({
+      where: { id },
+      include: { card: true, account: true },
+    });
+    delete user.password;
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {

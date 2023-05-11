@@ -20,12 +20,15 @@ export class CardService {
       data: {
         cardNumber: number,
       },
+      include: {
+        User: true,
+      },
     });
     return card;
   }
 
-  findAll() {
-    return `This action returns all card`;
+  async findAll() {
+    // const users = await this.prismaService.user.findMany({ where });
   }
 
   findOne(id: number) {
