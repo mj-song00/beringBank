@@ -28,10 +28,10 @@ export class CardController {
   }
 
   //user와 card 연결
-  @Patch('/:id')
-  connetUser(@Param('id') id: string) {
-    return this.cardService.connetUser(id);
-  }
+  @Patch('/connect/:cardId/:userId')
+  connetUser(@Param('cardId') cardId: string, @Param('userId') userId: string) {
+    return this.cardService.connetUser(cardId, userId);
+
 
   //card와 account 연결
   @Patch('/connect/:cardId/:accountId')

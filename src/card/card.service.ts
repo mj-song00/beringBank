@@ -46,12 +46,12 @@ export class CardService {
     return { message: 'card convert success' };
   }
 
-  async connetUser(id: string) {
-    const user = Number(id);
-
+  async connetUser(cardId: string, userId: string) {
+    const user = Number(userId);
+    const cardNumber = Number(cardId);
     const card = await this.prismaService.card.update({
       where: {
-        id: user,
+        id: cardNumber,
       },
       data: {
         User: {
@@ -65,9 +65,8 @@ export class CardService {
       },
     });
     delete card.User.password;
+    return { message: 'User connect success' };
 
-    return { message: 'User connet success' };
-  }
 
   async connetAccount(cardId: string, accountId: string) {
     const findCard = Number(cardId);
