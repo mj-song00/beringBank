@@ -65,9 +65,8 @@ export class CardService {
       },
     });
     delete card.User.password;
-
     return { message: 'User connect success' };
-  }
+
 
   async connetAccount(cardId: string, accountId: string) {
     const findCard = Number(cardId);

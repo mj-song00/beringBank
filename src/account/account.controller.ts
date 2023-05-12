@@ -1,4 +1,6 @@
+
 import { Controller, Get, Patch, Param, Post } from '@nestjs/common';
+
 import { AccountService } from './account.service';
 
 @Controller('account')
@@ -38,5 +40,6 @@ export class AccountController {
     @Param('withdraw') withdraw: string,
   ) {
     return this.accountService.withdrawCash(userId, accountId, withdraw);
+
   }
 }

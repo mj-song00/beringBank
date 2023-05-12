@@ -1,5 +1,7 @@
+
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
+
 import { PrismaService } from './../prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
 
@@ -26,12 +28,14 @@ export class AccountService {
     return { result: account, message: 'account created!' };
   }
 
+
   async update(accountId: string, userId: string) {
     const user = Number(userId);
     const accountNumber = Number(accountId);
     const account = await this.prismaService.account.update({
       where: {
         id: accountNumber,
+
       },
       data: {
         User: {
@@ -44,6 +48,7 @@ export class AccountService {
         User: true,
       },
     });
+
     delete account.User.password;
     return { result: account, message: '계좌 연결 성공' };
   }
