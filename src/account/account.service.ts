@@ -1,6 +1,7 @@
+import { CreateAccountDto } from './dto/create-account.dto';
+import { UpdateAccountDto } from './dto/update-account.dto';
 import { PrismaService } from './../prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
-import { userInfo } from 'os';
 
 @Injectable()
 export class AccountService {
@@ -43,7 +44,6 @@ export class AccountService {
         User: true,
       },
     });
-
     delete account.User.password;
     return { result: account, message: '계좌 연결 성공' };
   }
