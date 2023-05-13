@@ -1,8 +1,6 @@
 import { PrismaService } from './../prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
 import { CreateCardDto } from './dto/create-card.dto';
-import { UpdateCardDto } from './dto/update-card.dto';
-import { find } from 'rxjs';
 
 @Injectable()
 export class CardService {
@@ -41,6 +39,7 @@ export class CardService {
         Account: true,
       },
     });
+
     delete card.User.password;
 
     return card;

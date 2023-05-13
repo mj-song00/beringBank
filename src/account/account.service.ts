@@ -1,9 +1,10 @@
-import { CreateAccountDto } from './dto/create-account.dto';
-import { UpdateAccountDto } from './dto/update-account.dto';
+import {
+  CreateAccountDto,
+  DepositOrWithdrawDto,
+} from './dto/create-account.dto';
 
 import { PrismaService } from './../prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
-import { User } from '@prisma/client';
 
 @Injectable()
 export class AccountService {
@@ -42,14 +43,12 @@ export class AccountService {
     return { result: account, message: 'account created!' };
   }
 
-  async depositCash(userId: string, accountId: string, deposit: string) {
-    const user = Number(userId);
-    const account = Number(accountId);
-    const cash = Number(deposit);
+  async depositCash(depositOrWithdrawDto: DepositOrWithdrawDto) {
+    const { userId, accountId, cash } = depositOrWithdrawDto;
 
     const balance = await this.prismaService.account.update({
       where: {
-        id: account,
+        id: accountId,
       },
       data: {
         depositCash: {
@@ -60,7 +59,7 @@ export class AccountService {
     });
     const userCash = await this.prismaService.user.update({
       where: {
-        id: user,
+        id: userId,
       },
       data: {
         cashWithdraw: {
@@ -71,18 +70,14 @@ export class AccountService {
         },
       },
     });
-
     return { result: balance.accountBalance };
   }
 
-  async withdrawCash(userId: string, accountId: string, withdraw: string) {
-    const user = Number(userId);
-    const account = Number(accountId);
-    const cash = Number(withdraw);
-
+  async withdrawCash(depositOrWithdrawDto: DepositOrWithdrawDto) {
+    const { userId, accountId, cash } = depositOrWithdrawDto;
     const balance = await this.prismaService.account.update({
       where: {
-        id: account,
+        id: accountId,
       },
       data: {
         withdrawCash: {
@@ -93,7 +88,7 @@ export class AccountService {
     });
     const userCash = await this.prismaService.user.update({
       where: {
-        id: user,
+        id: userId,
       },
       data: {
         cashDeposit: {
@@ -104,7 +99,6 @@ export class AccountService {
         },
       },
     });
-
     return { result: balance.accountBalance };
   }
 }

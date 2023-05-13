@@ -1,11 +1,9 @@
-import { AccountService } from './../account/account.service';
-import { UpdateAccountDto } from './../account/dto/update-account.dto';
 import { PrismaService } from './../prisma/prisma.service';
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateUserDto, SignInDto } from './dto/create-user.dto';
+import { JwtPayload, sign } from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
-import { Account } from '@prisma/client';
+import { User } from '@prisma/client';
 @Injectable()
 export class UserService {
   constructor(
@@ -34,26 +32,41 @@ export class UserService {
         account: true,
       },
     });
+
     delete user.password;
     return { result: user, message: '유저생성 완료' };
   }
 
-  // async update(updateUserDto: UpdateUserDto, account: Account) {
-  //   const { accountIds } = updateUserDto;
+  async signIn(signInDto: SignInDto) {
+    const { userId, password } = signInDto;
 
-  // const updateUserAccount = await this.prismaService.user.create({
-  //   where: { id: userId },
-  //   data: {
-  //     account: {
-  //       connect: { id: updateToAccount },
-  //     },
-  //   },
-  //   include: {
-  //     account: true,
-  //   },
-  // });
-  // console.log(updateUserAccount);
-  //}
+    const user = await this.prismaService.user.findUnique({
+      where: { userId },
+    });
+
+    if (!user) throw new BadRequestException();
+
+    const validatePassword = await bcrypt.compare(password, user.password);
+
+    if (!userId || !validatePassword) {
+      throw new BadRequestException();
+    }
+    const token = this.createToken(user);
+
+    return { result: token, message: '로그인 완료' };
+  }
+
+  createToken(user: User) {
+    const payload: JwtPayload = {
+      sub: user.userId,
+    };
+
+    const secret = process.env.JWT_SECRET;
+    const expiresIn = '3h';
+    const token = sign(payload, secret, { expiresIn });
+
+    return token;
+  }
 
   async findOne(id: number) {
     const user = await this.prismaService.user.findUnique({
@@ -61,5 +74,7 @@ export class UserService {
       include: { card: true, account: true },
     });
     delete user.password;
+
+    return { result: user, message: `${id}번 유저조회 완료` };
   }
 }

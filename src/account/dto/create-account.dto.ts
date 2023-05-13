@@ -8,3 +8,9 @@ export class CreateAccountDto {
   accountBalance: number;
   userId: number;
 }
+
+export class DepositOrWithdrawDto {
+  userId: number;
+  accountId: number;
+  cash: number;
+}

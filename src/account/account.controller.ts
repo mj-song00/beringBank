@@ -1,6 +1,8 @@
-import { CreateAccountDto } from './dto/create-account.dto';
-import { Controller, Get, Patch, Param, Post, Body } from '@nestjs/common';
-
+import {
+  CreateAccountDto,
+  DepositOrWithdrawDto,
+} from './dto/create-account.dto';
+import { Controller, Post, Body } from '@nestjs/common';
 import { AccountService } from './account.service';
 
 @Controller('account')
@@ -14,22 +16,14 @@ export class AccountController {
   }
 
   //현금 입금
-  @Post('/deposit/:userId/:accountId/:deposit')
-  depositCash(
-    @Param('userId') userId: string,
-    @Param('accountId') accountId: string,
-    @Param('deposit') deposit: string,
-  ) {
-    return this.accountService.depositCash(userId, accountId, deposit);
+  @Post('/deposit')
+  depositCash(@Body() depositOrWithdrawDto: DepositOrWithdrawDto) {
+    return this.accountService.depositCash(depositOrWithdrawDto);
   }
 
   //현금출금
-  @Post('/withdraw/:userId/:accountId/:withdraw')
-  withdrawCash(
-    @Param('userId') userId: string,
-    @Param('accountId') accountId: string,
-    @Param('withdraw') withdraw: string,
-  ) {
-    return this.accountService.withdrawCash(userId, accountId, withdraw);
+  @Post('/withdraw')
+  withdrawCash(@Body() depositOrWithdrawDto: DepositOrWithdrawDto) {
+    return this.accountService.withdrawCash(depositOrWithdrawDto);
   }
 }

@@ -1,18 +1,6 @@
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { PrismaService } from './../prisma/prisma.service';
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-} from '@nestjs/common';
+import { CreateUserDto, SignInDto } from './dto/create-user.dto';
+import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { UserService } from './user.service';
-import { Account as Taccount } from '@prisma/client';
-import { UpdateAccountDto } from 'src/account/dto/update-account.dto';
 
 @Controller('user')
 export class UserController {
@@ -23,13 +11,10 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
-  // @Patch('/account')
-  // updateAccount(
-  //   @Body() updateUserDto: UpdateUserDto,
-  //   @Account() account: Taccount,
-  // ) {
-  //   return this.userService.update(updateUserDto, account);
-  // }
+  @Post('/login')
+  login(@Body() signInDto: SignInDto) {
+    return this.userService.signIn(signInDto);
+  }
 
   @Get(':id')
   findOne(@Param('id') id: string) {

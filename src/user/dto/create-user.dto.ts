@@ -9,8 +9,12 @@ export class CreateUserDto {
 
   @IsNotEmpty()
   nickname: string;
-
   cashWithdraw: number;
   cashDeposit: number;
   cashBalance: number;
+}
+
+export class SignInDto {
+  userId: string;
+  password: string;
 }
