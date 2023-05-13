@@ -11,17 +11,18 @@ datasource db {
 }
 
 model User {
-  id           Int       @id @default(autoincrement())
-  userId       String    @unique
-  password     String
-  nickname     String
-  cashWithdraw Int       @default(0)
-  cashDeposit  Int       @default(0)
-  cashBalance  Int       @default(1000)
-  card         Card[]
-  account      Account[]
-  createAt     DateTime  @default(now())
-  updateAt     DateTime  @updatedAt
+  id            Int             @id @default(autoincrement())
+  userId        String          @unique
+  password      String
+  nickname      String
+  cashWithdraw  Int             @default(0)
+  cashDeposit   Int             @default(0)
+  cashBalance   Int             @default(1000)
+  card          Card[]
+  account       Account[]
+  createAt      DateTime        @default(now())
+  updateAt      DateTime        @updatedAt
+  AccountToUser AccountToUser[]
 }
 
 model Card {
@@ -37,14 +38,25 @@ model Card {
 }
 
 model Account {
-  id             Int      @id @default(autoincrement())
-  accountNumber  String   @unique
-  withdrawCash   Int      @default(0)
-  depositCash    Int      @default(0)
-  accountBalance Int      @default(0)
-  User           User?    @relation(fields: [userId], references: [id])
+  id             Int             @id @default(autoincrement())
+  accountNumber  String          @unique
+  withdrawCash   Int             @default(0)
+  depositCash    Int             @default(0)
+  accountBalance Int             @default(0)
+  User           User?           @relation(fields: [userId], references: [id])
   userId         Int?
   card           Card[]
-  createAt       DateTime @default(now())
-  updateAt       DateTime @updatedAt
+  createAt       DateTime        @default(now())
+  updateAt       DateTime        @updatedAt
+  AccountToUser  AccountToUser[]
+}
+
+model AccountToUser {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  account   Account  @relation(fields: [accountId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+  accountId Int
+  userId    Int
 }

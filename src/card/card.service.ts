@@ -46,47 +46,47 @@ export class CardService {
     return { message: 'card convert success' };
   }
 
-  async connetUser(cardId: string, userId: string) {
-    const user = Number(userId);
-    const cardNumber = Number(cardId);
-    const card = await this.prismaService.card.update({
-      where: {
-        id: cardNumber,
-      },
-      data: {
-        User: {
-          connect: {
-            id: user,
-          },
-        },
-      },
-      include: {
-        User: true,
-      },
-    });
-    delete card.User.password;
-    return { message: 'User connect success' };
+  // async connetUser(cardId: string, userId: string) {
+  //   const user = Number(userId);
+  //   const cardNumber = Number(cardId);
+  //   const card = await this.prismaService.card.update({
+  //     where: {
+  //       id: cardNumber,
+  //     },
+  //     data: {
+  //       User: {
+  //         connect: {
+  //           id: user,
+  //         },
+  //       },
+  //     },
+  //     include: {
+  //       User: true,
+  //     },
+  //   });
+  //   delete card.User.password;
+  //   return { message: 'User connect success' };
 
+  // async connetAccount(cardId: string, accountId: string) {
+  //     const findCard = Number(cardId);
+  //     const account = Number(accountId);
 
-  async connetAccount(cardId: string, accountId: string) {
-    const findCard = Number(cardId);
-    const account = Number(accountId);
-
-    const card = await this.prismaService.card.update({
-      where: {
-        id: findCard,
-      },
-      data: {
-        Account: {
-          connect: {
-            id: account,
-          },
-        },
-      },
-      include: {
-        Account: true,
-      },
-    });
-    return { message: 'card connet account' };
-  }
+  //     const card = await this.prismaService.card.update({
+  //       where: {
+  //         id: findCard,
+  //       },
+  //       data: {
+  //         Account: {
+  //           connect: {
+  //             id: account,
+  //           },
+  //         },
+  //       },
+  //       include: {
+  //         Account: true,
+  //       },
+  //     });
+  //     return { message: 'card connet account' };
+  //   }
+  //}
 }

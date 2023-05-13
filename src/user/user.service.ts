@@ -1,11 +1,16 @@
+import { AccountService } from './../account/account.service';
+import { UpdateAccountDto } from './../account/dto/update-account.dto';
 import { PrismaService } from './../prisma/prisma.service';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcrypt';
+import { Account } from '@prisma/client';
 @Injectable()
 export class UserService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService, //private accountService: AccountService,
+  ) {}
 
   async create(createUserDto: CreateUserDto) {
     const { userId, password, nickname } = createUserDto;
@@ -32,6 +37,23 @@ export class UserService {
     delete user.password;
     return { result: user, message: '유저생성 완료' };
   }
+
+  // async update(updateUserDto: UpdateUserDto, account: Account) {
+  //   const { accountIds } = updateUserDto;
+
+  // const updateUserAccount = await this.prismaService.user.create({
+  //   where: { id: userId },
+  //   data: {
+  //     account: {
+  //       connect: { id: updateToAccount },
+  //     },
+  //   },
+  //   include: {
+  //     account: true,
+  //   },
+  // });
+  // console.log(updateUserAccount);
+  //}
 
   async findOne(id: number) {
     const user = await this.prismaService.user.findUnique({

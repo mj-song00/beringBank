@@ -1,15 +1,18 @@
-
 import { CreateAccountDto } from './dto/create-account.dto';
 import { UpdateAccountDto } from './dto/update-account.dto';
 
 import { PrismaService } from './../prisma/prisma.service';
 import { Injectable } from '@nestjs/common';
+import { User } from '@prisma/client';
 
 @Injectable()
 export class AccountService {
   constructor(private prismaService: PrismaService) {}
 
-  async register() {
+  async register(createAccountDto: CreateAccountDto) {
+    const { accountBalance, accountNumber, withdrawCash, depositCash, userId } =
+      createAccountDto;
+
     const random = parseInt(process.env.ACCOUNT_RANDOM_NUMBER);
     function randomNumber(n) {
       let str = '';
@@ -21,36 +24,22 @@ export class AccountService {
     const number = randomNumber(random);
 
     const account = await this.prismaService.account.create({
-      data: { accountNumber: number },
-      include: { User: true },
-    });
-
-    return { result: account, message: 'account created!' };
-  }
-
-
-  async update(accountId: string, userId: string) {
-    const user = Number(userId);
-    const accountNumber = Number(accountId);
-    const account = await this.prismaService.account.update({
-      where: {
-        id: accountNumber,
-
-      },
       data: {
+        accountNumber: number,
+        accountBalance,
+        withdrawCash,
+        depositCash,
         User: {
           connect: {
-            id: user,
+            id: userId,
           },
         },
       },
-      include: {
-        User: true,
-      },
+      include: { User: true },
     });
-
     delete account.User.password;
-    return { result: account, message: '계좌 연결 성공' };
+
+    return { result: account, message: 'account created!' };
   }
 
   async depositCash(userId: string, accountId: string, deposit: string) {

@@ -1,25 +1,18 @@
-
-import { Controller, Get, Patch, Param, Post } from '@nestjs/common';
+import { CreateAccountDto } from './dto/create-account.dto';
+import { Controller, Get, Patch, Param, Post, Body } from '@nestjs/common';
 
 import { AccountService } from './account.service';
+import { User as TUser } from '@prisma/client';
+import { User } from 'src/decorator/user.decorator';
 
 @Controller('account')
 export class AccountController {
   constructor(private readonly accountService: AccountService) {}
 
   // 계좌생성
-  @Get('/register')
-  createAcoount() {
-    return this.accountService.register();
-  }
-
-  //user와 account 연결
-  @Patch('/connect/:accountId/:userId')
-  update(
-    @Param('accountId') accountId: string,
-    @Param('userId') userId: string,
-  ) {
-    return this.accountService.update(accountId, userId);
+  @Post('/register')
+  createAcoount(@Body() createAccountDto: CreateAccountDto) {
+    return this.accountService.register(createAccountDto);
   }
 
   //현금 입금
@@ -40,6 +33,5 @@ export class AccountController {
     @Param('withdraw') withdraw: string,
   ) {
     return this.accountService.withdrawCash(userId, accountId, withdraw);
-
   }
 }
