@@ -19,6 +19,10 @@
     <td> /user </td>
     <td> POST </td>
     <tr>
+       <td> 유저 login </td>
+    <td> /user/login </td>
+    <td> POST </td>
+    <tr>
       <td> 계좌생성 </td>
       <td> account/register </td>
       <td> POST </td>
