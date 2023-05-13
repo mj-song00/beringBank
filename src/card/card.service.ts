@@ -7,7 +7,9 @@ import { find } from 'rxjs';
 @Injectable()
 export class CardService {
   constructor(private prismaService: PrismaService) {}
-  async register() {
+
+  async register(createCardDto: CreateCardDto) {
+    const { cardNumber, isAble, userId, accountId } = createCardDto;
     const random = parseInt(process.env.CARD_RANDOM_NUMBER);
     function randomNumber(n) {
       let str = '';
@@ -22,11 +24,25 @@ export class CardService {
     const card = await this.prismaService.card.create({
       data: {
         cardNumber: number,
+        isAble,
+        User: {
+          connect: {
+            id: userId,
+          },
+        },
+        Account: {
+          connect: {
+            id: accountId,
+          },
+        },
       },
       include: {
         User: true,
+        Account: true,
       },
     });
+    delete card.User.password;
+
     return card;
   }
 
@@ -45,48 +61,4 @@ export class CardService {
 
     return { message: 'card convert success' };
   }
-
-  // async connetUser(cardId: string, userId: string) {
-  //   const user = Number(userId);
-  //   const cardNumber = Number(cardId);
-  //   const card = await this.prismaService.card.update({
-  //     where: {
-  //       id: cardNumber,
-  //     },
-  //     data: {
-  //       User: {
-  //         connect: {
-  //           id: user,
-  //         },
-  //       },
-  //     },
-  //     include: {
-  //       User: true,
-  //     },
-  //   });
-  //   delete card.User.password;
-  //   return { message: 'User connect success' };
-
-  // async connetAccount(cardId: string, accountId: string) {
-  //     const findCard = Number(cardId);
-  //     const account = Number(accountId);
-
-  //     const card = await this.prismaService.card.update({
-  //       where: {
-  //         id: findCard,
-  //       },
-  //       data: {
-  //         Account: {
-  //           connect: {
-  //             id: account,
-  //           },
-  //         },
-  //       },
-  //       include: {
-  //         Account: true,
-  //       },
-  //     });
-  //     return { message: 'card connet account' };
-  //   }
-  //}
 }

@@ -2,8 +2,6 @@ import { CreateAccountDto } from './dto/create-account.dto';
 import { Controller, Get, Patch, Param, Post, Body } from '@nestjs/common';
 
 import { AccountService } from './account.service';
-import { User as TUser } from '@prisma/client';
-import { User } from 'src/decorator/user.decorator';
 
 @Controller('account')
 export class AccountController {
