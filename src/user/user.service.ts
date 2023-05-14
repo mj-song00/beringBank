@@ -3,7 +3,6 @@ import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from './../prisma/prisma.service';
 import { BadRequestException, Injectable, Next } from '@nestjs/common';
 import { CreateUserDto, SignInDto } from './dto/create-user.dto';
-import { JwtPayload, sign } from 'jsonwebtoken';
 import * as bcrypt from 'bcrypt';
 import { User } from '@prisma/client';
 @Injectable()
@@ -78,11 +77,9 @@ export class UserService {
   }
 
   async tokenValidateUser(payload: Payload) {
-    console.log(payload);
     const user = await this.prismaService.user.findFirst({
       where: { nickname: payload.username },
     });
-    console.log(user);
     return user;
   }
 
