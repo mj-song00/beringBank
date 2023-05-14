@@ -56,11 +56,13 @@
 
 ## 실행방법
 1. git clone후 해당 폴더를 열어 터미널에 npm install을 입력해주세요.
-2. 터미널에 npx prisma init, npx prisma generate 를 입력해주세요. 정상적으로 실행되면 .env가 생성됩니다.
+2.  터미널에 cd src입력후 npx prisma init, npx prisma generate, npx prisma db push를 입력해주세요. 정상적으로 실행되면 .env가 생성됩니다.
+
 2-1. .env를 사용하고 싶지 않으시다면, 
-      prisma/schema.prisma에 있는 DATABASE_URL을 직접 입력해주세요.
-      user/userService.ts에 있는 USER_SALT에 숫자를 입력해주세요.
-      card/cardService.ts에 있는 CARD_RAMDOM_NUMBER에 숫자를 입력해주세요      
-      account/accountService.ts에 있는 ACCOUNT_RANDOM_NUMBER에 숫자를 입력해주세요
-      user.module.ts, passport.jwt.strategy.ts에 있는 'jwtConstants.secret, process.env.JWT_CINSTANTS'에 같은 문자열을 입력해주세요. 복호화 비밀번호 입니다.
+      prisma/schema.prisma에 있는 DATABASE_URL을 직접 입력해주세요.<br>
+      user/userService.ts에 있는 USER_SALT에 숫자를 입력해주세요.<br>
+      card/cardService.ts에 있는 CARD_RAMDOM_NUMBER에 숫자를 입력해주세요.<br>      
+      account/accountService.ts에 있는 ACCOUNT_RANDOM_NUMBER에 숫자를 입력해주세요.<br>
+      user.module.ts, passport.jwt.strategy.ts에 있는 'jwtConstants.secret, process.env.JWT_CINSTANTS'에 같은 문자열을 입력해주세요. <br>jwt 복호화 비밀번호 입니다.<br>
+
 3. npm run start:dev를 터미널에 입력해주세요. 서버가 실행됩니다. 
