@@ -14,7 +14,7 @@ model User {
   id            Int             @id @default(autoincrement())
   userId        String          @unique
   password      String
-  nickname      String
+  nickname      String          @unique
   cashWithdraw  Int             @default(0)
   cashDeposit   Int             @default(0)
   cashBalance   Int             @default(1000)

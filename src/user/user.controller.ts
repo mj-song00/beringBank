@@ -1,7 +1,17 @@
+import { User } from '@prisma/client';
 import { CreateUserDto, SignInDto } from './dto/create-user.dto';
-import { Controller, Get, Post, Body, Param, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  UseGuards,
+  Req,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { AuthGuard } from '@nestjs/passport';
+import { GetUser } from 'src/decorator/get-user.decorator';
 
 @Controller('user')
 export class UserController {
@@ -17,9 +27,9 @@ export class UserController {
     return this.userService.signIn(signInDto);
   }
 
-  @Get(':id')
+  @Get('')
   @UseGuards(AuthGuard('jwt'))
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+  find(@GetUser() user: User) {
+    return this.userService.find(user);
   }
 }

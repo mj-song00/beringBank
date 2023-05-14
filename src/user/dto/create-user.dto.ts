@@ -3,10 +3,10 @@ import { IsNotEmpty } from 'class-validator';
 export class CreateUserDto {
   @IsNotEmpty()
   userId: string;
-
   @IsNotEmpty()
   password: string;
-
+  @IsNotEmpty()
+  confirmPassword: string;
   @IsNotEmpty()
   nickname: string;
   cashWithdraw: number;
