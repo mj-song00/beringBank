@@ -1,6 +1,6 @@
 ## Bering Bank
 
-* 과제 수행기간 : 2023.05.09 ~ 2023.05.13
+* 과제 수행기간 : 2023.05.09 ~ 2023.05.14
 * 사용언어 및 프레임워크 : Typescript, Nest.js
 * Database : PostgresQL
 
@@ -27,6 +27,10 @@
       <td> account/register </td>
       <td> POST </td>
       <tr>
+        <td> 계좌조회 </td>
+      <td> account </td>
+      <td> GET </td>
+      <tr>
       <td> 현금입금 </td>
       <td> account/deposit </td>
       <td> POST </td>
@@ -44,5 +48,10 @@
       <td> PATCH </td>
        </table>
 
+## 구현
+1. userId, nickname을 이용한 token 생성
+2. 비밀번호: 숫자, 영문자, 특수문자를 포함한 최소8, 최대15자리 문자열 
+3. bcyrpt를 이용한 비밀번호 암호화
+4. @UseGuards(AuthGuard('jwt')), @GetUser Custom decorator를 이용하여 개인정보 조회
 
           
