@@ -1,3 +1,5 @@
+import { Payload } from './../security/payload.interface';
+import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from './../prisma/prisma.service';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateUserDto, SignInDto } from './dto/create-user.dto';
@@ -7,7 +9,8 @@ import { User } from '@prisma/client';
 @Injectable()
 export class UserService {
   constructor(
-    private prismaService: PrismaService, //private accountService: AccountService,
+    private prismaService: PrismaService,
+    private jwtService: JwtService,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
@@ -51,26 +54,23 @@ export class UserService {
     if (!userId || !validatePassword) {
       throw new BadRequestException();
     }
-    const token = this.createToken(user);
-
-    return { result: token, message: '로그인 완료' };
+    const payload = { username: user.nickname, sub: user.id };
+    return {
+      access_token: await this.jwtService.signAsync(payload),
+    };
   }
 
-  createToken(user: User) {
-    const payload: JwtPayload = {
-      sub: user.userId,
-    };
+  async tokenValidateUser(payload: Payload) {
+    const user = await this.prismaService.user.findFirst({
+      where: { id: payload.id },
+    });
 
-    const secret = process.env.JWT_SECRET;
-    const expiresIn = '3h';
-    const token = sign(payload, secret, { expiresIn });
-
-    return token;
+    return user;
   }
 
   async findOne(id: number) {
     const user = await this.prismaService.user.findUnique({
-      where: { id },
+      where: { id: id },
       include: { card: true, account: true },
     });
     delete user.password;

@@ -1,6 +1,7 @@
 import { CreateUserDto, SignInDto } from './dto/create-user.dto';
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller('user')
 export class UserController {
@@ -12,11 +13,12 @@ export class UserController {
   }
 
   @Post('/login')
-  login(@Body() signInDto: SignInDto) {
+  async login(@Body() signInDto: SignInDto) {
     return this.userService.signIn(signInDto);
   }
 
   @Get(':id')
+  @UseGuards(AuthGuard('jwt'))
   findOne(@Param('id') id: string) {
     return this.userService.findOne(+id);
   }
